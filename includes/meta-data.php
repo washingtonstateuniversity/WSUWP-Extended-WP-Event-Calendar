@@ -50,6 +50,10 @@ function post_meta_keys() {
 			'type' => 'string',
 			'sanitize_callback' => 'esc_url_raw',
 		),
+		'_cost' => array(
+			'type' => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+		),
 	);
 }
 
@@ -93,6 +97,14 @@ function meta_boxes() {
 		'wsuwp_event_calendar_action',
 		'Action',
 		'WSU\Events\Meta_Data\display_action_meta_box',
+		\wp_event_calendar_allowed_post_types(),
+		'above_event_editor',
+		'default'
+	);
+	add_meta_box(
+		'wsuwp_event_calendar_cost',
+		'Cost',
+		'WSU\Events\Meta_Data\display_cost_meta_box',
 		\wp_event_calendar_allowed_post_types(),
 		'above_event_editor',
 		'default'
@@ -252,6 +264,32 @@ function display_action_meta_box( $post ) {
 					   name="_action_url"
 					   class="widefat"
 					   value="<?php echo esc_attr( $url ); ?>" />
+			</td>
+		</tr>
+	</table>
+	<?php
+}
+
+/**
+ * Displays the meta box used to capture an event's cost data.
+ *
+ * @since 0.0.1
+ *
+ * @param \WP_Post $post
+ */
+function display_cost_meta_box( $post ) {
+	$cost = get_post_meta( $post->ID, '_cost', true );
+	?>
+	<table class="form-table">
+		<tr>
+			<th>
+				<label for="wsuwp_event_cost">Price</label>
+			</th>
+			<td>
+				$<input type="text"
+						id="wsuwp_event_cost"
+						name="_cost"
+						value="<?php echo esc_attr( $cost ); ?>" />
 			</td>
 		</tr>
 	</table>
