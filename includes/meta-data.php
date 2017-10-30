@@ -194,6 +194,7 @@ function display_contact_meta_box( $post ) {
 				<input type="tel"
 					   id="wsuwp_event_contact_phone"
 					   name="_contact_phone"
+					   placeholder="(555) 555-5555, ext. 5555"
 					   value="<?php echo esc_attr( $phone ); ?>" />
 			</td>
 		</tr>
