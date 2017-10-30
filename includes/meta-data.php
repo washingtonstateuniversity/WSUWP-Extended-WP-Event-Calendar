@@ -42,6 +42,14 @@ function post_meta_keys() {
 			'type' => 'string',
 			'sanitize_callback' => 'WSU\Events\Meta_Data\sanitize_phone_number',
 		),
+		'_action_text' => array(
+			'type' => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+		),
+		'_action_url' => array(
+			'type' => 'string',
+			'sanitize_callback' => 'esc_url_raw',
+		),
 	);
 }
 
@@ -77,6 +85,14 @@ function meta_boxes() {
 		'wsuwp_event_calendar_contact',
 		'Contact/Organizer',
 		'WSU\Events\Meta_Data\display_contact_meta_box',
+		\wp_event_calendar_allowed_post_types(),
+		'above_event_editor',
+		'default'
+	);
+	add_meta_box(
+		'wsuwp_event_calendar_action',
+		'Action',
+		'WSU\Events\Meta_Data\display_action_meta_box',
 		\wp_event_calendar_allowed_post_types(),
 		'above_event_editor',
 		'default'
@@ -196,6 +212,46 @@ function display_contact_meta_box( $post ) {
 					   name="_contact_phone"
 					   placeholder="(555) 555-5555, ext. 5555"
 					   value="<?php echo esc_attr( $phone ); ?>" />
+			</td>
+		</tr>
+	</table>
+	<?php
+}
+
+/**
+ * Displays the meta box used to capture an event's action data.
+ *
+ * @since 0.0.1
+ *
+ * @param \WP_Post $post
+ */
+function display_action_meta_box( $post ) {
+	$text = get_post_meta( $post->ID, '_action_text', true );
+	$url = get_post_meta( $post->ID, '_action_url', true );
+	?>
+	<p class="description">Use these fields to create a call to action (Register, RSVP, etc.)</p>
+	<table class="form-table">
+		<tr>
+			<th>
+				<label for="wsuwp_event_action_text">Text</label>
+			</th>
+			<td>
+				<input type="text"
+					   id="wsuwp_event_action_text"
+					   name="_action_text"
+					   value="<?php echo esc_attr( $text ); ?>" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<label for="wsuwp_event_action_url">URL</label>
+			</th>
+			<td>
+				<input type="url"
+					   id="wsuwp_event_action_url"
+					   name="_action_url"
+					   class="widefat"
+					   value="<?php echo esc_attr( $url ); ?>" />
 			</td>
 		</tr>
 	</table>
