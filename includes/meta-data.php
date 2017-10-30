@@ -2,6 +2,7 @@
 
 namespace WSU\Events\Meta_Data;
 
+add_filter( 'wp_event_calendar_location', '__return_false' );
 add_action( 'init', 'WSU\Events\Meta_Data\register_meta' );
 add_action( 'add_meta_boxes_event', 'WSU\Events\Meta_Data\meta_boxes', 10 );
 add_action( 'save_post_event', 'WSU\Events\Meta_Data\save_post', 10, 2 );
