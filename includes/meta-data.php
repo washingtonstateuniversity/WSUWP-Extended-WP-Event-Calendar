@@ -356,6 +356,35 @@ function sanitize_coordinate( $coordinate ) {
 }
 
 /**
+ * Sanitizes and formats the value of the contact phone number field.
+ *
+ * @since 0.0.1
+ *
+ * @param string $phone_number The unsanitized phone value.
+ *
+ * @return string
+ */
+function sanitize_phone_number( $phone_number ) {
+	$digits = preg_replace( '/[^0-9]/', '', $phone_number );
+
+	if ( strlen( $digits ) !== 10 && strlen( $digits ) !== 14 ) {
+		return '';
+	}
+
+	$area_code = substr( $digits, 0, 3 );
+	$prefix = substr( $digits, 3, 3 );
+	$line_number = substr( $digits, 6, 4 );
+	$sanitized_phone_number = '(' . $area_code . ') ' . $prefix . '-' . $line_number;
+
+	if ( strlen( $digits ) === 14 ) {
+		$extension = substr( $digits, -4 );
+		$sanitized_phone_number .= ', ext. ' . $extension;
+	}
+
+	return $sanitized_phone_number;
+}
+
+/**
  * Saves additional data for an event.
  *
  * @since 0.0.1
