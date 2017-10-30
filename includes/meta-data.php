@@ -337,6 +337,25 @@ function display_site_meta_box( $post ) {
 }
 
 /**
+ * Sanitizes coordinate field values.
+ *
+ * @since 0.0.1
+ *
+ * @param string $coordinate The unsanitized coordinate value.
+ *
+ * @return string
+ */
+function sanitize_coordinate( $coordinate ) {
+	$coordinate_float = floatval( $coordinate );
+
+	if ( (float) 0 === $coordinate_float ) {
+		return '';
+	}
+
+	return $coordinate_float;
+}
+
+/**
  * Saves additional data for an event.
  *
  * @since 0.0.1
