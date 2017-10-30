@@ -30,6 +30,18 @@ function post_meta_keys() {
 			'type' => 'string',
 			'sanitize_callback' => 'wp_kses_post',
 		),
+		'_contact_name' => array(
+			'type' => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+		),
+		'_contact_email' => array(
+			'type' => 'string',
+			'sanitize_callback' => 'sanitize_email',
+		),
+		'_contact_phone' => array(
+			'type' => 'string',
+			'sanitize_callback' => 'WSU\Events\Meta_Data\sanitize_phone_number',
+		),
 	);
 }
 
@@ -57,6 +69,14 @@ function meta_boxes() {
 		'wsuwp_event_calendar_location',
 		'Location',
 		'WSU\Events\Meta_Data\display_location_meta_box',
+		\wp_event_calendar_allowed_post_types(),
+		'above_event_editor',
+		'default'
+	);
+	add_meta_box(
+		'wsuwp_event_calendar_contact',
+		'Contact/Organizer',
+		'WSU\Events\Meta_Data\display_contact_meta_box',
 		\wp_event_calendar_allowed_post_types(),
 		'above_event_editor',
 		'default'
@@ -125,6 +145,56 @@ function display_location_meta_box( $post ) {
 
 				wp_editor( $notes, '_location_notes', $notes_editor_settings );
 				?>
+			</td>
+		</tr>
+	</table>
+	<?php
+}
+
+/**
+ * Displays the meta box used to capture an event's contact data.
+ *
+ * @since 0.0.1
+ *
+ * @param \WP_Post $post
+ */
+function display_contact_meta_box( $post ) {
+	$name = get_post_meta( $post->ID, '_contact_name', true );
+	$email = get_post_meta( $post->ID, '_contact_email', true );
+	$phone = get_post_meta( $post->ID, '_contact_phone', true );
+	?>
+	<table class="form-table">
+		<tr>
+			<th>
+				<label for="wsuwp_event_contact_name">Name</label>
+			</th>
+			<td>
+				<input type="text"
+					   id="wsuwp_event_contact_name"
+					   name="_contact_name"
+					   value="<?php echo esc_attr( $name ); ?>" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<label for="wsuwp_event_contact_email">Email</label>
+			</th>
+			<td>
+				<input type="email"
+					   id="wsuwp_event_contact_email"
+					   name="_contact_email"
+					   value="<?php echo esc_attr( $email ); ?>" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<label for="wsuwp_event_contact_phone">Phone Number</label>
+			</th>
+			<td>
+				<input type="tel"
+					   id="wsuwp_event_contact_phone"
+					   name="_contact_phone"
+					   value="<?php echo esc_attr( $phone ); ?>" />
 			</td>
 		</tr>
 	</table>
