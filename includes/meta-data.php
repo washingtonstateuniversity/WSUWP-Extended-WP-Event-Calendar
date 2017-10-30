@@ -4,6 +4,7 @@ namespace WSU\Events\Meta_Data;
 
 add_action( 'init', 'WSU\Events\Meta_Data\register_meta' );
 add_action( 'add_meta_boxes_event', 'WSU\Events\Meta_Data\meta_boxes', 10 );
+add_action( 'save_post_event', 'WSU\Events\Meta_Data\save_post', 10, 2 );
 
 /**
  * Provides an array of additional post meta keys associated with events.
@@ -333,4 +334,40 @@ function display_site_meta_box( $post ) {
 		</tr>
 	</table>
 	<?php
+}
+
+/**
+ * Saves additional data for an event.
+ *
+ * @since 0.0.1
+ *
+ * @param int     $post_id
+ * @param \WP_Post $post
+ */
+function save_post( $post_id, $post ) {
+	if ( ! isset( $_POST['wsuwp_event_nonce'] ) || ! wp_verify_nonce( $_POST['wsuwp_event_nonce'], 'wsuwp_event' ) ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	if ( 'auto-draft' === $post->post_status ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	$keys = get_registered_meta_keys( 'post' );
+
+	foreach ( post_meta_keys() as $key => $args ) {
+		if ( isset( $_POST[ $key ] ) && '' !== $_POST[ $key ] && isset( $args['sanitize_callback'] ) ) {
+			update_post_meta( $post_id, $key, $_POST[ $key ] );
+		} else {
+			delete_post_meta( $post_id, $key );
+		}
+	}
 }
