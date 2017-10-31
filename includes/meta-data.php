@@ -6,6 +6,7 @@ add_filter( 'wp_event_calendar_location', '__return_false' );
 add_action( 'init', 'WSU\Events\Meta_Data\register_meta' );
 add_action( 'add_meta_boxes_event', 'WSU\Events\Meta_Data\meta_boxes', 10 );
 add_action( 'save_post_event', 'WSU\Events\Meta_Data\save_post', 10, 2 );
+add_action( 'admin_enqueue_scripts', 'WSU\Events\Meta_Data\admin_enqueue_scripts' );
 
 /**
  * Provides an array of additional post meta keys associated with events.
@@ -344,7 +345,7 @@ function display_site_meta_box( $post ) {
  *
  * @param string $coordinate The unsanitized coordinate value.
  *
- * @return string
+ * @return float
  */
 function sanitize_coordinate( $coordinate ) {
 	$coordinate_float = floatval( $coordinate );
@@ -419,4 +420,19 @@ function save_post( $post_id, $post ) {
 			delete_post_meta( $post_id, $key );
 		}
 	}
+}
+
+/**
+ * Enqueue scripts
+ *
+ * @since 0.0.1
+ */
+function admin_enqueue_scripts() {
+
+	// Bail if not an event post type.
+	if ( ! post_type_supports( get_post_type(), 'events' ) ) {
+		return;
+	}
+
+	wp_enqueue_style( 'wsuwp_event_calendar', plugins_url( '/css/edit-post.css', dirname( __FILE__ ) ) );
 }

@@ -1,0 +1,3 @@
+#wp_event_calendar_duration tr:last-of-type {
+	display: none;
+}
