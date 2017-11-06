@@ -25,5 +25,6 @@
         <exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterOpen" />
         <exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
         <exclude name="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace" />
+        <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
     </rule>
 </ruleset>
