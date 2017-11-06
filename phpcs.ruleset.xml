@@ -18,6 +18,7 @@
     <rule ref="WordPress-Extra">
         <exclude name="WordPress.NamingConventions.ValidFunctionName" />
         <exclude name="WordPress.Files.FileName" />
+        <exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned" />
         <exclude name="Squiz.PHP.EmbeddedPhp.NoSemicolon" />
         <exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeEnd" />
         <exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
