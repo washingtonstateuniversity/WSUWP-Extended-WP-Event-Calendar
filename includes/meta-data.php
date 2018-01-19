@@ -145,6 +145,7 @@ function display_location_meta_box( $post ) {
 				<input type="text"
 					   id="wsuwp_event_location_name"
 					   name="_wsuwp_event_location_name"
+					   class="widefat"
 					   value="<?php echo esc_attr( $name ); ?>" />
 			</td>
 		</tr>
@@ -156,6 +157,7 @@ function display_location_meta_box( $post ) {
 				<input type="text"
 					   id="wsuwp_event_location_address"
 					   name="_wsuwp_event_location_address"
+					   class="widefat"
 					   value="<?php echo esc_attr( $address ); ?>" />
 			</td>
 		</tr>
@@ -199,6 +201,7 @@ function display_contact_meta_box( $post ) {
 				<input type="text"
 					   id="wsuwp_event_contact_name"
 					   name="_wsuwp_event_contact_name"
+					   class="widefat"
 					   value="<?php echo esc_attr( $name ); ?>" />
 			</td>
 		</tr>
@@ -210,6 +213,7 @@ function display_contact_meta_box( $post ) {
 				<input type="email"
 					   id="wsuwp_event_contact_email"
 					   name="_wsuwp_event_contact_email"
+					   class="widefat"
 					   value="<?php echo esc_attr( $email ); ?>" />
 			</td>
 		</tr>
@@ -222,6 +226,7 @@ function display_contact_meta_box( $post ) {
 					   id="wsuwp_event_contact_phone"
 					   name="_wsuwp_event_contact_phone"
 					   placeholder="(555) 555-5555, ext. 5555"
+					   class="widefat"
 					   value="<?php echo esc_attr( $phone ); ?>" />
 			</td>
 		</tr>
@@ -250,6 +255,7 @@ function display_action_meta_box( $post ) {
 				<input type="text"
 					   id="wsuwp_event_action_text"
 					   name="_wsuwp_event_action_text"
+					   class="widefat"
 					   value="<?php echo esc_attr( $text ); ?>" />
 			</td>
 		</tr>
@@ -285,10 +291,11 @@ function display_cost_meta_box( $post ) {
 				<label for="wsuwp_event_cost">Price</label>
 			</th>
 			<td>
-				$<input type="text"
-						id="wsuwp_event_cost"
-						name="_wsuwp_event_cost"
-						value="<?php echo esc_attr( $cost ); ?>" />
+				<input type="text"
+					   id="wsuwp_event_cost"
+					   name="_wsuwp_event_cost"
+					   class="widefat"
+					   value="<?php echo esc_attr( $cost ); ?>" />
 			</td>
 		</tr>
 	</table>
