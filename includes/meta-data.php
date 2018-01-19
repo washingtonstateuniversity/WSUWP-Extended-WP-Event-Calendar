@@ -17,47 +17,47 @@ add_action( 'admin_enqueue_scripts', 'WSU\Events\Meta_Data\admin_enqueue_scripts
  */
 function post_meta_keys() {
 	return array(
-		'_location_name' => array(
+		'_wsuwp_event_location_name' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
 		),
-		'_location_latitude' => array(
+		'_wsuwp_event_location_latitude' => array(
 			'type' => 'float',
 			'sanitize_callback' => 'WSU\Events\Meta_Data\sanitize_coordinate',
 		),
-		'_location_longitude' => array(
+		'_wsuwp_event_location_longitude' => array(
 			'type' => 'float',
 			'sanitize_callback' => 'WSU\Events\Meta_Data\sanitize_coordinate',
 		),
-		'_location_notes' => array(
+		'_wsuwp_event_location_notes' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'wp_kses_post',
 		),
-		'_contact_name' => array(
+		'_wsuwp_event_contact_name' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
 		),
-		'_contact_email' => array(
+		'_wsuwp_event_contact_email' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'sanitize_email',
 		),
-		'_contact_phone' => array(
+		'_wsuwp_event_contact_phone' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'WSU\Events\Meta_Data\sanitize_phone_number',
 		),
-		'_action_text' => array(
+		'_wsuwp_event_action_text' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
 		),
-		'_action_url' => array(
+		'_wsuwp_event_action_url' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'esc_url_raw',
 		),
-		'_cost' => array(
+		'_wsuwp_event_cost' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
 		),
-		'_related_site' => array(
+		'_wsuwp_event_related_site' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'esc_url_raw',
 		),
@@ -136,10 +136,10 @@ function meta_boxes() {
 function display_location_meta_box( $post ) {
 	wp_nonce_field( 'wsuwp_event', 'wsuwp_event_nonce' );
 
-	$name = get_post_meta( $post->ID, '_location_name', true );
-	$latitude = get_post_meta( $post->ID, '_location_latitude', true );
-	$longitude = get_post_meta( $post->ID, '_location_longitude', true );
-	$notes = get_post_meta( $post->ID, '_location_notes', true );
+	$name = get_post_meta( $post->ID, '_wsuwp_event_location_name', true );
+	$latitude = get_post_meta( $post->ID, '_wsuwp_event_location_latitude', true );
+	$longitude = get_post_meta( $post->ID, '_wsuwp_event_location_longitude', true );
+	$notes = get_post_meta( $post->ID, '_wsuwp_event_location_notes', true );
 	?>
 	<table class="form-table">
 		<tr>
@@ -149,7 +149,7 @@ function display_location_meta_box( $post ) {
 			<td>
 				<input type="text"
 					   id="wsuwp_event_location_name"
-					   name="_location_name"
+					   name="_wsuwp_event_location_name"
 					   value="<?php echo esc_attr( $name ); ?>" />
 			</td>
 		</tr>
@@ -160,7 +160,7 @@ function display_location_meta_box( $post ) {
 			<td>
 				<input type="text"
 					   id="wsuwp_event_location_latitude"
-					   name="_location_latitude"
+					   name="_wsuwp_event_location_latitude"
 					   value="<?php echo esc_attr( $latitude ); ?>" />
 			</td>
 		</tr>
@@ -171,7 +171,7 @@ function display_location_meta_box( $post ) {
 			<td>
 				<input type="text"
 					   id="wsuwp_event_location_longitude"
-					   name="_location_longitude"
+					   name="_wsuwp_event_location_longitude"
 					   value="<?php echo esc_attr( $longitude ); ?>" />
 			</td>
 		</tr>
@@ -186,7 +186,7 @@ function display_location_meta_box( $post ) {
 					'quicktags' => false,
 				);
 
-				wp_editor( $notes, '_location_notes', $notes_editor_settings );
+				wp_editor( $notes, '_wsuwp_event_location_notes', $notes_editor_settings );
 				?>
 			</td>
 		</tr>
@@ -202,9 +202,9 @@ function display_location_meta_box( $post ) {
  * @param \WP_Post $post
  */
 function display_contact_meta_box( $post ) {
-	$name = get_post_meta( $post->ID, '_contact_name', true );
-	$email = get_post_meta( $post->ID, '_contact_email', true );
-	$phone = get_post_meta( $post->ID, '_contact_phone', true );
+	$name = get_post_meta( $post->ID, '_wsuwp_event_contact_name', true );
+	$email = get_post_meta( $post->ID, '_wsuwp_event_contact_email', true );
+	$phone = get_post_meta( $post->ID, '_wsuwp_event_contact_phone', true );
 	?>
 	<table class="form-table">
 		<tr>
@@ -214,7 +214,7 @@ function display_contact_meta_box( $post ) {
 			<td>
 				<input type="text"
 					   id="wsuwp_event_contact_name"
-					   name="_contact_name"
+					   name="_wsuwp_event_contact_name"
 					   value="<?php echo esc_attr( $name ); ?>" />
 			</td>
 		</tr>
@@ -225,7 +225,7 @@ function display_contact_meta_box( $post ) {
 			<td>
 				<input type="email"
 					   id="wsuwp_event_contact_email"
-					   name="_contact_email"
+					   name="_wsuwp_event_contact_email"
 					   value="<?php echo esc_attr( $email ); ?>" />
 			</td>
 		</tr>
@@ -236,7 +236,7 @@ function display_contact_meta_box( $post ) {
 			<td>
 				<input type="tel"
 					   id="wsuwp_event_contact_phone"
-					   name="_contact_phone"
+					   name="_wsuwp_event_contact_phone"
 					   placeholder="(555) 555-5555, ext. 5555"
 					   value="<?php echo esc_attr( $phone ); ?>" />
 			</td>
@@ -253,8 +253,8 @@ function display_contact_meta_box( $post ) {
  * @param \WP_Post $post
  */
 function display_action_meta_box( $post ) {
-	$text = get_post_meta( $post->ID, '_action_text', true );
-	$url = get_post_meta( $post->ID, '_action_url', true );
+	$text = get_post_meta( $post->ID, '_wsuwp_event_action_text', true );
+	$url = get_post_meta( $post->ID, '_wsuwp_event_action_url', true );
 	?>
 	<p class="description">Use these fields to create a call to action (Register, RSVP, etc.)</p>
 	<table class="form-table">
@@ -265,7 +265,7 @@ function display_action_meta_box( $post ) {
 			<td>
 				<input type="text"
 					   id="wsuwp_event_action_text"
-					   name="_action_text"
+					   name="_wsuwp_event_action_text"
 					   value="<?php echo esc_attr( $text ); ?>" />
 			</td>
 		</tr>
@@ -276,7 +276,7 @@ function display_action_meta_box( $post ) {
 			<td>
 				<input type="url"
 					   id="wsuwp_event_action_url"
-					   name="_action_url"
+					   name="_wsuwp_event_action_url"
 					   class="widefat"
 					   value="<?php echo esc_attr( $url ); ?>" />
 			</td>
@@ -293,7 +293,7 @@ function display_action_meta_box( $post ) {
  * @param \WP_Post $post
  */
 function display_cost_meta_box( $post ) {
-	$cost = get_post_meta( $post->ID, '_cost', true );
+	$cost = get_post_meta( $post->ID, '_wsuwp_event_cost', true );
 	?>
 	<table class="form-table">
 		<tr>
@@ -303,7 +303,7 @@ function display_cost_meta_box( $post ) {
 			<td>
 				$<input type="text"
 						id="wsuwp_event_cost"
-						name="_cost"
+						name="_wsuwp_event_cost"
 						value="<?php echo esc_attr( $cost ); ?>" />
 			</td>
 		</tr>
@@ -319,7 +319,7 @@ function display_cost_meta_box( $post ) {
  * @param \WP_Post $post
  */
 function display_site_meta_box( $post ) {
-	$url = get_post_meta( $post->ID, '_related_site', true );
+	$url = get_post_meta( $post->ID, '_wsuwp_event_related_site', true );
 	?>
 	<table class="form-table">
 		<tr>
@@ -329,7 +329,7 @@ function display_site_meta_box( $post ) {
 			<td>
 				<input type="url"
 					   id="wsuwp_event_site"
-					   name="_related_site"
+					   name="_wsuwp_event_related_site"
 					   class="widefat"
 					   value="<?php echo esc_attr( $url ); ?>" />
 			</td>
