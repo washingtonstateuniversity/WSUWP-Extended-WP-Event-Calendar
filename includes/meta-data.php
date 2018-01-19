@@ -21,13 +21,9 @@ function post_meta_keys() {
 			'type' => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
 		),
-		'_wsuwp_event_location_latitude' => array(
+		'_wsuwp_event_location_address' => array(
 			'type' => 'float',
-			'sanitize_callback' => 'WSU\Events\Meta_Data\sanitize_coordinate',
-		),
-		'_wsuwp_event_location_longitude' => array(
-			'type' => 'float',
-			'sanitize_callback' => 'WSU\Events\Meta_Data\sanitize_coordinate',
+			'sanitize_callback' => 'sanitize_text_field',
 		),
 		'_wsuwp_event_location_notes' => array(
 			'type' => 'string',
@@ -137,8 +133,7 @@ function display_location_meta_box( $post ) {
 	wp_nonce_field( 'wsuwp_event', 'wsuwp_event_nonce' );
 
 	$name = get_post_meta( $post->ID, '_wsuwp_event_location_name', true );
-	$latitude = get_post_meta( $post->ID, '_wsuwp_event_location_latitude', true );
-	$longitude = get_post_meta( $post->ID, '_wsuwp_event_location_longitude', true );
+	$address = get_post_meta( $post->ID, '_wsuwp_event_location_address', true );
 	$notes = get_post_meta( $post->ID, '_wsuwp_event_location_notes', true );
 	?>
 	<table class="form-table">
@@ -155,24 +150,13 @@ function display_location_meta_box( $post ) {
 		</tr>
 		<tr>
 			<th>
-				<label for="wsuwp_event_location_latitude">Latitude</label>
+				<label for="wsuwp_event_location_address">Address</label>
 			</th>
 			<td>
 				<input type="text"
-					   id="wsuwp_event_location_latitude"
-					   name="_wsuwp_event_location_latitude"
-					   value="<?php echo esc_attr( $latitude ); ?>" />
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<label for="wsuwp_event_location_longitude">Longitude</label>
-			</th>
-			<td>
-				<input type="text"
-					   id="wsuwp_event_location_longitude"
-					   name="_wsuwp_event_location_longitude"
-					   value="<?php echo esc_attr( $longitude ); ?>" />
+					   id="wsuwp_event_location_address"
+					   name="_wsuwp_event_location_address"
+					   value="<?php echo esc_attr( $address ); ?>" />
 			</td>
 		</tr>
 		<tr>
@@ -336,25 +320,6 @@ function display_site_meta_box( $post ) {
 		</tr>
 	</table>
 	<?php
-}
-
-/**
- * Sanitizes coordinate field values.
- *
- * @since 0.0.1
- *
- * @param string $coordinate The unsanitized coordinate value.
- *
- * @return float
- */
-function sanitize_coordinate( $coordinate ) {
-	$coordinate_float = floatval( $coordinate );
-
-	if ( (float) 0 === $coordinate_float ) {
-		return '';
-	}
-
-	return $coordinate_float;
 }
 
 /**
