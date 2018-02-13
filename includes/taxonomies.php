@@ -43,6 +43,11 @@ function taxonomy_meta_box( $post_types ) {
 function make_public( $args, $taxonomy ) {
 	if ( 'event-type' === $taxonomy || 'event-category' === $taxonomy || 'event-tag' === $taxonomy ) {
 		$args['public'] = true;
+		$args['show_in_rest'] = true;
+	}
+
+	if ( 'wsuwp_university_category' === $taxonomy || 'wsuwp_university_location' === $taxonomy || 'wsuwp_university_org' === $taxonomy ) {
+		$args['show_in_rest'] = true;
 	}
 
 	return $args;
