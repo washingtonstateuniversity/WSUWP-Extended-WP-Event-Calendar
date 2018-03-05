@@ -26,6 +26,7 @@ function types_slug() {
 }
 
 add_action( 'init', 'WSU\Events\Taxonomies\unregister_taxonomies', 11 );
+add_action( 'manage_event_posts_columns', 'WSU\Events\Taxonomies\manage_columns', 11 );
 add_action( 'init', 'WSU\Events\Taxonomies\register_university_taxonomies', 12 );
 add_filter( 'wsuwp_taxonomy_metabox_post_types', 'WSU\Events\Taxonomies\taxonomy_meta_box', 10 );
 
@@ -48,6 +49,21 @@ add_filter( 'submenu_file', 'WSU\Events\Taxonomies\types_submenu_file', 10, 2 );
 function unregister_taxonomies() {
 	unregister_taxonomy_for_object_type( 'event-category', 'event' );
 	unregister_taxonomy_for_object_type( 'event-tag', 'event' );
+}
+
+/**
+ * Unsets the Event Categories column from the Events list table.
+ *
+ * @since 0.0.2
+ *
+ * @param array $columns
+ *
+ * @return array
+ */
+function manage_columns( $columns ) {
+	unset( $columns['event-categories'] );
+
+	return $columns;
 }
 
 /**
