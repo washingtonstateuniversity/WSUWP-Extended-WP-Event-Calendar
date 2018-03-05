@@ -28,7 +28,6 @@ function types_slug() {
 add_action( 'init', 'WSU\Events\Taxonomies\unregister_taxonomies', 11 );
 add_action( 'init', 'WSU\Events\Taxonomies\register_university_taxonomies', 12 );
 add_filter( 'wsuwp_taxonomy_metabox_post_types', 'WSU\Events\Taxonomies\taxonomy_meta_box', 10 );
-add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\make_public', 10, 2 );
 
 add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\types_arguments', 10, 2 );
 add_filter( 'wsuwp_taxonomy_metabox_disable_new_term_adding', 'WSU\Events\Taxonomies\disable_new_types' );
@@ -73,24 +72,6 @@ function taxonomy_meta_box( $post_types ) {
 	$post_types['event'] = get_object_taxonomies( 'event' );
 
 	return $post_types;
-}
-
-/**
- * Allows public views of taxonomy pages.
- *
- * @since 0.0.1
- *
- * @param array  $args     Arguments for registering a taxonomy.
- * @param string $taxonomy Taxonomy key.
- *
- * @return array
- */
-function make_public( $args, $taxonomy ) {
-	if ( 'wsuwp_university_category' === $taxonomy || 'wsuwp_university_location' === $taxonomy || 'wsuwp_university_org' === $taxonomy ) {
-		$args['show_in_rest'] = true;
-	}
-
-	return $args;
 }
 
 /**
