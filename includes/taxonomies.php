@@ -2,9 +2,20 @@
 
 namespace WSU\Events\Taxonomies;
 
+add_action( 'init', 'WSU\Events\Taxonomies\unregister_taxonomies', 11 );
 add_action( 'init', 'WSU\Events\Taxonomies\register_university_taxonomies', 12 );
 add_filter( 'wsuwp_taxonomy_metabox_post_types', 'WSU\Events\Taxonomies\taxonomy_meta_box', 10 );
 add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\make_public', 10, 2 );
+
+/**
+ * Unregisters Event Categories and Event Tags.
+ *
+ * @since 0.0.2
+ */
+function unregister_taxonomies() {
+	unregister_taxonomy_for_object_type( 'event-category', 'event' );
+	unregister_taxonomy_for_object_type( 'event-tag', 'event' );
+}
 
 /**
  * Registers University Taxonomies for the Events post type.
