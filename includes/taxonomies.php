@@ -7,6 +7,10 @@ add_action( 'init', 'WSU\Events\Taxonomies\register_university_taxonomies', 12 )
 add_filter( 'wsuwp_taxonomy_metabox_post_types', 'WSU\Events\Taxonomies\taxonomy_meta_box', 10 );
 add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\make_public', 10, 2 );
 
+add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\hierarchical_types', 10, 2 );
+add_filter( 'wsuwp_taxonomy_metabox_disable_new_term_adding', 'WSU\Events\Taxonomies\disable_new_types' );
+add_filter( 'pre_insert_term', 'WSU\Events\Taxonomies\prevent_type_term_creation', 10, 2 );
+
 /**
  * Unregisters Event Categories and Event Tags.
  *
@@ -62,4 +66,55 @@ function make_public( $args, $taxonomy ) {
 	}
 
 	return $args;
+}
+
+/**
+ * Make the Types taxonomy hierarchical.
+ *
+ * @since 0.0.2
+ *
+ * @param array  $args     Arguments for registering a taxonomy.
+ * @param string $taxonomy Taxonomy key.
+ *
+ * @return array
+ */
+function hierarchical_types( $args, $taxonomy ) {
+	if ( 'event-type' === $taxonomy ) {
+		$args['hierarchical'] = true;
+	}
+
+	return $args;
+}
+
+/**
+ * Disables the interface for adding new terms to the Types taxonomy.
+ *
+ * @since 0.0.2
+ *
+ * @param array $taxonomies
+ *
+ * @return array
+ */
+function disable_new_types( $taxonomies ) {
+	$taxonomies[] = 'event-type';
+
+	return $taxonomies;
+}
+
+/**
+ * Prevent new terms being created for the Types taxonomy in normal term entry situations.
+ *
+ * @since 0.0.2
+ *
+ * @param string $term     Term being added.
+ * @param string $taxonomy Taxonomy of the term being added.
+ *
+ * @return string|WP_Error The untouched term if not the Types taxonomy, WP_Error otherwise.
+ */
+function prevent_type_term_creation( $term, $taxonomy ) {
+	if ( 'event-type' === get_current_screen()->taxonomy ) {
+		$term = new WP_Error( 'invalid_term', 'These terms cannot be modified.' );
+	}
+
+	return $term;
 }
