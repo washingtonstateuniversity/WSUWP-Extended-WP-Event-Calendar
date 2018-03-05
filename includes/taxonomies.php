@@ -30,7 +30,7 @@ add_action( 'init', 'WSU\Events\Taxonomies\register_university_taxonomies', 12 )
 add_filter( 'wsuwp_taxonomy_metabox_post_types', 'WSU\Events\Taxonomies\taxonomy_meta_box', 10 );
 add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\make_public', 10, 2 );
 
-add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\hierarchical_types', 10, 2 );
+add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\types_arguments', 10, 2 );
 add_filter( 'wsuwp_taxonomy_metabox_disable_new_term_adding', 'WSU\Events\Taxonomies\disable_new_types' );
 add_filter( 'pre_insert_term', 'WSU\Events\Taxonomies\prevent_type_term_creation', 10, 2 );
 
@@ -86,11 +86,6 @@ function taxonomy_meta_box( $post_types ) {
  * @return array
  */
 function make_public( $args, $taxonomy ) {
-	if ( types_slug() === $taxonomy ) {
-		$args['public'] = true;
-		$args['show_in_rest'] = true;
-	}
-
 	if ( 'wsuwp_university_category' === $taxonomy || 'wsuwp_university_location' === $taxonomy || 'wsuwp_university_org' === $taxonomy ) {
 		$args['show_in_rest'] = true;
 	}
@@ -99,7 +94,7 @@ function make_public( $args, $taxonomy ) {
 }
 
 /**
- * Make the Types taxonomy hierarchical.
+ * Modifies arguments for registering the Types taxonomy.
  *
  * @since 0.0.2
  *
@@ -108,9 +103,11 @@ function make_public( $args, $taxonomy ) {
  *
  * @return array
  */
-function hierarchical_types( $args, $taxonomy ) {
+function types_arguments( $args, $taxonomy ) {
 	if ( types_slug() === $taxonomy ) {
 		$args['hierarchical'] = true;
+		$args['public'] = true;
+		$args['show_in_rest'] = true;
 	}
 
 	return $args;
