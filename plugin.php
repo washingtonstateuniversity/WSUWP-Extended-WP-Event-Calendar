@@ -21,6 +21,7 @@ if ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
 	return;
 } else {
 	include_once __DIR__ . '/includes/events.php';
+	include_once __DIR__ . '/includes/venues.php';
 	include_once __DIR__ . '/includes/taxonomies.php';
 	include_once __DIR__ . '/includes/meta-data.php';
 }
