@@ -54,7 +54,10 @@ function register_post_type() {
  * @since 0.1.0
  */
 function register_taxonomy() {
-	\register_taxonomy( 'venue-tax', array( 'venue' ), array(
+	\register_taxonomy( 'venue-tax', array(
+		'venue',
+		'event',
+	), array(
 		'hierarchical'      => false,
 		'public'            => false,
 		'show_in_nav_menus' => false,
