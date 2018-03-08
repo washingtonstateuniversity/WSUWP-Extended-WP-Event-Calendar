@@ -14,37 +14,39 @@ add_action( 'cmb2_init', 'WSU\Events\Venues\cmb2_init_address_field' );
  * @since 0.1.0
  */
 function register_post_type() {
-	\register_post_type( 'venue', array(
-		'labels'            => array(
-			'name'                => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'singular_name'       => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'all_items'           => __( 'All Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'new_item'            => __( 'New Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'add_new'             => __( 'Add New', 'wsuwp-extended-wp-event-calendar' ),
-			'add_new_item'        => __( 'Add New Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'edit_item'           => __( 'Edit Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'view_item'           => __( 'View Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'search_items'        => __( 'Search Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'not_found'           => __( 'No Venues found', 'wsuwp-extended-wp-event-calendar' ),
-			'not_found_in_trash'  => __( 'No Venues found in trash', 'wsuwp-extended-wp-event-calendar' ),
-			'parent_item_colon'   => __( 'Parent Venues', 'wsuwp-extended-wp-event-calendar' ),
-			'menu_name'           => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
-		),
-		'public'            => true,
-		'hierarchical'      => false,
-		'show_ui'           => true,
-		'show_in_nav_menus' => true,
-		'supports'          => array( 'title' ),
-		'has_archive'       => true,
-		'rewrite'           => array(
-			'slug' => 'venue',
-		),
-		'query_var'         => true,
-		'menu_icon'         => 'dashicons-admin-post',
-		'show_in_rest'      => true,
-		'rest_base'         => 'venue',
-		'rest_controller_class' => 'WP_REST_Posts_Controller',
-	) );
+	\register_post_type(
+		'venue', array(
+			'labels'            => array(
+				'name'                => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'singular_name'       => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'all_items'           => __( 'All Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'new_item'            => __( 'New Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'add_new'             => __( 'Add New', 'wsuwp-extended-wp-event-calendar' ),
+				'add_new_item'        => __( 'Add New Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'edit_item'           => __( 'Edit Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'view_item'           => __( 'View Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'search_items'        => __( 'Search Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'not_found'           => __( 'No Venues found', 'wsuwp-extended-wp-event-calendar' ),
+				'not_found_in_trash'  => __( 'No Venues found in trash', 'wsuwp-extended-wp-event-calendar' ),
+				'parent_item_colon'   => __( 'Parent Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'menu_name'           => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
+			),
+			'public'            => true,
+			'hierarchical'      => false,
+			'show_ui'           => true,
+			'show_in_nav_menus' => true,
+			'supports'          => array( 'title' ),
+			'has_archive'       => true,
+			'rewrite'           => array(
+				'slug' => 'venue',
+			),
+			'query_var'         => true,
+			'menu_icon'         => 'dashicons-admin-post',
+			'show_in_rest'      => true,
+			'rest_base'         => 'venue',
+			'rest_controller_class' => 'WP_REST_Posts_Controller',
+		)
+	);
 }
 
 /**
@@ -54,28 +56,31 @@ function register_post_type() {
  * @since 0.1.0
  */
 function register_taxonomy() {
-	\register_taxonomy( 'venue-tax', array(
-		'venue',
-		'event',
-	), array(
-		'hierarchical'      => false,
-		'public'            => false,
-		'show_in_nav_menus' => false,
-		'show_ui'           => false,
-		'show_admin_column' => false,
-		'query_var'         => false,
-		'rewrite'           => false,
-		'capabilities'      => array(
-			'manage_terms'  => 'edit_posts',
-			'edit_terms'    => 'edit_posts',
-			'delete_terms'  => 'edit_posts',
-			'assign_terms'  => 'edit_posts',
+	\register_taxonomy(
+		'venue-tax', array(
+			'venue',
+			'event',
 		),
-		'labels'            => array(
-			'name'                       => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
-		),
-		'show_in_rest'      => false,
-	) );
+		array(
+			'hierarchical'      => false,
+			'public'            => false,
+			'show_in_nav_menus' => false,
+			'show_ui'           => false,
+			'show_admin_column' => false,
+			'query_var'         => false,
+			'rewrite'           => false,
+			'capabilities'      => array(
+				'manage_terms'  => 'edit_posts',
+				'edit_terms'    => 'edit_posts',
+				'delete_terms'  => 'edit_posts',
+				'assign_terms'  => 'edit_posts',
+			),
+			'labels'            => array(
+				'name'                       => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
+			),
+			'show_in_rest'      => false,
+		)
+	);
 }
 
 /**
@@ -104,9 +109,11 @@ function mirror_taxonomy_post_type( $post_id, $post ) {
 	$term = get_term_by( 'slug', $post->post_name, 'venue-tax' );
 
 	if ( ! is_object( $term ) ) {
-		$term = wp_insert_term( $post->post_title, 'venue-tax', array(
-			'slug' => $post->post_name,
-		) );
+		$term = wp_insert_term(
+			$post->post_title, 'venue-tax', array(
+				'slug' => $post->post_name,
+			)
+		);
 
 		if ( ! is_wp_error( $term ) ) {
 			wp_set_object_terms( $post_id, $term['term_id'], 'venue-tax' );
@@ -124,37 +131,45 @@ function mirror_taxonomy_post_type( $post_id, $post ) {
  * @sine 0.1.0
  */
 function add_location_metabox() {
-	$cmb = new_cmb2_box( array(
-		'id'           => 'location_data',
-		'title'        => 'Venue Location',
-		'object_types' => array(
-			'venue',
-		),
-		'context'      => 'normal',
-		'priority'     => 'high',
-		'show_names'   => true,
-	) );
+	$cmb = new_cmb2_box(
+		array(
+			'id'           => 'location_data',
+			'title'        => 'Venue Location',
+			'object_types' => array(
+				'venue',
+			),
+			'context'      => 'normal',
+			'priority'     => 'high',
+			'show_names'   => true,
+		)
+	);
 
-	$cmb->add_field( array(
-		'name' => 'Venue Address',
-		'desc' => 'Enter the physical address for the venue.',
-		'id' => 'venue_address',
-		'type' => 'address',
-	) );
+	$cmb->add_field(
+		array(
+			'name' => 'Venue Address',
+			'desc' => 'Enter the physical address for the venue.',
+			'id' => 'venue_address',
+			'type' => 'address',
+		)
+	);
 
-	$cmb->add_field( array(
-		'name'       => 'Venue URL',
-		'desc'       => 'Enter the URL where a visitor can find more information about the venue.',
-		'id'         => 'venue_url',
-		'type'       => 'text_url',
-	) );
+	$cmb->add_field(
+		array(
+			'name'       => 'Venue URL',
+			'desc'       => 'Enter the URL where a visitor can find more information about the venue.',
+			'id'         => 'venue_url',
+			'type'       => 'text_url',
+		)
+	);
 
-	$cmb->add_field( array(
-		'name' => 'Venue email',
-		'desc' => 'Enter the email at which a visitor may contact the venue for more information.',
-		'id' => 'venue_email',
-		'type' => 'text_email',
-	) );
+	$cmb->add_field(
+		array(
+			'name' => 'Venue email',
+			'desc' => 'Enter the email at which a visitor may contact the venue for more information.',
+			'id' => 'venue_email',
+			'type' => 'text_email',
+		)
+	);
 }
 
 /**
@@ -175,14 +190,16 @@ function display_address_field( $post_id = 0 ) {
 	$address = get_post_meta( $post_id, 'venue_address', true );
 
 	// Set default values for each address key
-	$address = wp_parse_args( $address, array(
-		'address-1' => '',
-		'address-2' => '',
-		'city'      => '',
-		'state'     => '',
-		'zip'       => '',
-		'country'   => '',
-	) );
+	$address = wp_parse_args(
+		$address, array(
+			'address-1' => '',
+			'address-2' => '',
+			'city'      => '',
+			'state'     => '',
+			'zip'       => '',
+			'country'   => '',
+		)
+	);
 
 	$output = '<div class="cmb2-address">';
 	$output .= '<p><strong>Address:</strong> ' . esc_html( $address['address-1'] ) . '</p>';
