@@ -20,6 +20,13 @@ if ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
 	} );
 	return;
 } else {
+	/**
+	 * Load CMB2 for nicer metabox handling.
+	 */
+	if ( file_exists( __DIR__ . '/includes/cmb2/init.php' ) ) {
+		require_once __DIR__ . '/includes/cmb2/init.php';
+	}
+
 	include_once __DIR__ . '/includes/events.php';
 	include_once __DIR__ . '/includes/venues.php';
 	include_once __DIR__ . '/includes/taxonomies.php';
