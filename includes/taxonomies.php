@@ -33,6 +33,7 @@ add_filter( 'wsuwp_taxonomy_metabox_post_types', 'WSU\Events\Taxonomies\taxonomy
 add_filter( 'register_taxonomy_args', 'WSU\Events\Taxonomies\types_arguments', 10, 2 );
 add_filter( 'wsuwp_taxonomy_metabox_disable_new_term_adding', 'WSU\Events\Taxonomies\disable_new_types' );
 add_filter( 'pre_insert_term', 'WSU\Events\Taxonomies\prevent_type_term_creation', 10, 2 );
+add_action( 'init', 'WSU\Events\Taxonomies\types_checklist_args' );
 
 add_action( 'wpmu_new_blog', 'WSU\Events\Taxonomies\pre_load_types', 10 );
 add_action( 'admin_init', 'WSU\Events\Taxonomies\check_types_schema', 10 );
@@ -141,6 +142,22 @@ function prevent_type_term_creation( $term, $taxonomy ) {
 	}
 
 	return $term;
+}
+
+/**
+ * Disables the custom WP Event Calendar taxonomy checklist arguments.
+ *
+ * It replaces checkboxes with radio buttons, but outputs the term name
+ * instead of the ID as the input value, which results in quick/bulk
+ * edit changes not saving properly. We're not particularly concerned
+ * with limiting events to a single `type` designation, so we can safely
+ * disable this custom output.
+ *
+ * @since 0.0.3
+ *
+ */
+function types_checklist_args() {
+	remove_filter( 'wp_terms_checklist_args', 'wp_event_calendar_checklist_args', 10, 1 );
 }
 
 /**
