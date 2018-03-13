@@ -17,14 +17,6 @@ add_action( 'admin_enqueue_scripts', 'WSU\Events\Meta_Data\admin_enqueue_scripts
  */
 function post_meta_keys() {
 	return array(
-		'_wsuwp_event_location_name' => array(
-			'type' => 'string',
-			'sanitize_callback' => 'sanitize_text_field',
-		),
-		'_wsuwp_event_location_address' => array(
-			'type' => 'float',
-			'sanitize_callback' => 'sanitize_text_field',
-		),
 		'_wsuwp_event_location_notes' => array(
 			'type' => 'string',
 			'sanitize_callback' => 'wp_kses_post',
@@ -132,33 +124,38 @@ function meta_boxes() {
 function display_location_meta_box( $post ) {
 	wp_nonce_field( 'wsuwp_event', 'wsuwp_event_nonce' );
 
-	$name = get_post_meta( $post->ID, '_wsuwp_event_location_name', true );
-	$address = get_post_meta( $post->ID, '_wsuwp_event_location_address', true );
 	$notes = get_post_meta( $post->ID, '_wsuwp_event_location_notes', true );
+
+	$event_venue = wp_get_post_terms( $post->ID, 'venue-tax' );
+
+	if ( is_wp_error( $event_venue ) || empty( $event_venue ) ) {
+		$event_venue = '';
+	} else {
+		$event_venue = $event_venue[0]->slug;
+	}
+
+	$venues = get_terms( array(
+		'taxonomy' => 'venue-tax',
+		'hide_empty' => true,
+	) );
+
 	?>
 	<table class="form-table">
 		<tr>
 			<th>
-				<label for="wsuwp_event_location_name">Name</label>
+				<label for="wsuwp_event_venue">Venue</label>
 			</th>
 			<td>
-				<input type="text"
-					   id="wsuwp_event_location_name"
-					   name="_wsuwp_event_location_name"
-					   class="widefat"
-					   value="<?php echo esc_attr( $name ); ?>" />
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<label for="wsuwp_event_location_address">Address</label>
-			</th>
-			<td>
-				<input type="text"
-					   id="wsuwp_event_location_address"
-					   name="_wsuwp_event_location_address"
-					   class="widefat"
-					   value="<?php echo esc_attr( $address ); ?>" />
+				<select id="wsuwp_event_venue" name="_wsuwp_event_venue">
+					<option value="" <?php selected( $event_venue, '', true ); ?>>--- Select Venue ---</option>
+					<?php
+					foreach ( $venues as $venue ) {
+						?>
+						<option value="<?php echo esc_attr( $venue->slug ); ?>" <?php selected( $event_venue, $venue->slug, true ); ?>><?php echo esc_html( $venue->name ); ?></option>
+						<?php
+					}
+					?>
+				</select>
 			</td>
 		</tr>
 		<tr>
@@ -381,6 +378,18 @@ function save_post( $post_id, $post ) {
 
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
+	}
+
+	if ( isset( $_POST['_wsuwp_event_venue'] ) ) {
+		if ( empty( $_POST['_wsuwp_event_venue'] ) ) {
+			wp_set_post_terms( $post_id, '', 'venue-tax' );
+		} else {
+			$valid_venue = get_term_by( 'slug', sanitize_text_field( $_POST['_wsuwp_event_venue'] ), 'venue-tax' );
+
+			if ( is_object( $valid_venue ) ) {
+				wp_set_post_terms( $post_id, sanitize_text_field( $_POST['_wsuwp_event_venue'] ), 'venue-tax' );
+			}
+		}
 	}
 
 	$keys = get_registered_meta_keys( 'post' );

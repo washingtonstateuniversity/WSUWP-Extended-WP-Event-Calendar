@@ -20,7 +20,21 @@ if ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
 	} );
 	return;
 } else {
+	// Load WSUWP's implementation of CMB2.
+	if ( function_exists( 'WSUWP\CMB2\init' ) ) {
+		WSUWP\CMB2\init();
+	}
+
+	// Bail if CMB2 is not yet available.
+	if ( ! class_exists( 'CMB2_Bootstrap_230', false ) ) {
+		add_action( 'admin_notices', function() {
+			echo '<div class="error"><p>' . esc_html__( 'WSUWP Extended WP Event Calendar requires CMB2 to function properly. Please ensure this plugin is activated.', 'wsuwp-extended-wp-event-calendar' ) . '</p></div>';
+		} );
+		return;
+	}
+
 	include_once __DIR__ . '/includes/events.php';
+	include_once __DIR__ . '/includes/venues.php';
 	include_once __DIR__ . '/includes/taxonomies.php';
 	include_once __DIR__ . '/includes/meta-data.php';
 }
