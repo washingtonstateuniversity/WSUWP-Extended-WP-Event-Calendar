@@ -17,7 +17,7 @@ function register_post_type() {
 	\register_post_type(
 		'venue', array(
 			'labels'            => array(
-				'name'                => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
+				'name'                => __( 'Venue', 'wsuwp-extended-wp-event-calendar' ),
 				'singular_name'       => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
 				'all_items'           => __( 'All Venues', 'wsuwp-extended-wp-event-calendar' ),
 				'new_item'            => __( 'New Venues', 'wsuwp-extended-wp-event-calendar' ),
