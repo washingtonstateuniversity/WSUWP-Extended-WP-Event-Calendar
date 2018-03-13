@@ -371,11 +371,11 @@ function types_parent_file( $parent_file ) {
  */
 function types_submenu_file( $submenu_file, $parent_file ) {
 	if ( ! isset( $_GET['post_type'] ) || ! isset( $_GET['taxonomy'] ) ) { // WPCS: CSRF ok.
-		return $parent_file;
+		return $submenu_file;
 	}
 
 	if ( 'event' !== $_GET['post_type'] || types_slug() !== $_GET['taxonomy'] ) { // WPCS: CSRF ok.
-		return $parent_file;
+		return $submenu_file;
 	}
 
 	$submenu_file = 'edit-tags.php?taxonomy=event-type&amp;post_type=event';
