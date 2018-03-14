@@ -70,35 +70,39 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 
 	public static function init() {
 		add_filter( 'cmb2_render_class_address', array( __CLASS__, 'class_name' ) );
-		add_filter( 'cmb2_sanitize_address', array( __CLASS__, 'maybe_save_split_values' ), 12, 4 );
-
-		/**
-		 * The following snippets are required for allowing the address field
-		 * to work as a repeatable field, or in a repeatable group
-		 */
-		add_filter( 'cmb2_sanitize_address', array( __CLASS__, 'sanitize' ), 10, 5 );
-		add_filter( 'cmb2_types_esc_address', array( __CLASS__, 'escape' ), 10, 4 );
+		add_filter( 'cmb2_sanitize_address', array( __CLASS__, 'sanitize' ), 12, 4 );
 	}
 
+	/**
+	 * Return the name of this class so that CMB2 can initiate the default
+	 * renderer, which is the static render() method on this class.
+	 *
+	 * @return string
+	 */
 	public static function class_name() {
-		return __CLASS__; }
+		return __CLASS__;
+	}
 
 	/**
-	 * Handles outputting the address field.
+	 * Render the address field on the post edit screen.
 	 */
 	public function render() {
+		$object_id = $this->field->object_id;
 
-		// make sure we assign each part of the value we need.
-		$value = wp_parse_args(
-			$this->field->escaped_value(), array(
-				'address-1' => '',
-				'address-2' => '',
-				'city'      => '',
-				'state'     => '',
-				'zip'       => '',
-				'country'   => '',
-			)
+		// Define the expected data associated with an address.
+		$address_data = array(
+			'address-1' => '',
+			'address-2' => '',
+			'city' => '',
+			'state' => '',
+			'zip' => '',
+			'latitude' => '',
+			'longitude' => '',
 		);
+
+		foreach ( $address_data as $key => $value ) {
+			$address_data[ $key ] = esc_attr( get_post_meta( $object_id, $this->field->args( 'id' ) . '_' . $key, true ) );
+		}
 
 		if ( ! $this->field->args( 'do_country' ) ) {
 			$state_list = $this->field->args( 'state_list', array() );
@@ -113,7 +117,7 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 
 			$state_options = '';
 			foreach ( $state_list as $abrev => $state ) {
-				$state_options .= '<option value="' . $abrev . '" ' . selected( $value['state'], $abrev, false ) . '>' . $state . '</option>';
+				$state_options .= '<option value="' . $abrev . '" ' . selected( $address_data['state'], $abrev, false ) . '>' . $state . '</option>';
 			}
 		}
 
@@ -130,7 +134,7 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 				array(
 					'name'  => $this->_name( '[address-1]' ),
 					'id'    => $this->_id( '_address_1' ),
-					'value' => $value['address-1'],
+					'value' => $address_data['address-1'],
 					'desc'  => '',
 				)
 			); ?>
@@ -140,7 +144,7 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 				array(
 					'name'  => $this->_name( '[address-2]' ),
 					'id'    => $this->_id( '_address_2' ),
-					'value' => $value['address-2'],
+					'value' => $address_data['address-2'],
 					'desc'  => '',
 				)
 			); ?>
@@ -152,7 +156,7 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 						'class' => 'cmb_text_small',
 						'name'  => $this->_name( '[city]' ),
 						'id'    => $this->_id( '_city' ),
-						'value' => $value['city'],
+						'value' => $address_data['city'],
 						'desc'  => '',
 					)
 				); ?>
@@ -164,7 +168,7 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 							'class' => 'cmb_text_small',
 							'name'  => $this->_name( '[state]' ),
 							'id'    => $this->_id( '_state' ),
-							'value' => $value['state'],
+							'value' => $address_data['state'],
 							'desc'  => '',
 						)
 					); ?>
@@ -185,7 +189,7 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 						'class' => 'cmb_text_small',
 						'name'  => $this->_name( '[zip]' ),
 						'id'    => $this->_id( '_zip' ),
-						'value' => $value['zip'],
+						'value' => $address_data['zip'],
 						'type'  => 'number',
 						'desc'  => '',
 					)
@@ -198,7 +202,7 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 					array(
 						'name'  => $this->_name( '[country]' ),
 						'id'    => $this->_id( '_country' ),
-						'value' => $value['country'],
+						'value' => $address_data['country'],
 						'desc'  => '',
 					)
 				); ?>
@@ -207,6 +211,28 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 		<p class="clear">
 			<?php echo $this->_desc(); // WPCS: XSS Ok. ?>
 		</p>
+		<div class="alignleft"><p><label for="<?php echo esc_attr( $this->_id( '_latitude', false ) ); ?>'"><?php echo esc_html( $this->_text( 'address_latitude_text', 'Latitude' ) ); ?></label></p>
+			<?php echo $this->types->input( // WPCS: XSS Ok.
+				array(
+					'class' => 'cmb_text_small',
+					'name'  => $this->_name( '[latitude]' ),
+					'id'    => $this->_id( '_latitude' ),
+					'value' => $address_data['latitude'],
+					'desc'  => '',
+				)
+			); ?>
+		</div>
+		<div class="alignleft"><p><label for="<?php echo esc_attr( $this->_id( '_longitude', false ) ); ?>'"><?php echo esc_html( $this->_text( 'address_longitude_text', 'Longitude' ) ); ?></label></p>
+			<?php echo $this->types->input( // WPCS: XSS Ok.
+				array(
+					'class' => 'cmb_text_small',
+					'name'  => $this->_name( '[longitude]' ),
+					'id'    => $this->_id( '_longitude' ),
+					'value' => $address_data['longitude'],
+					'desc'  => '',
+				)
+			); ?>
+		</div>
 		<?php
 
 		// grab the data from the output buffer.
@@ -214,19 +240,37 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 	}
 
 	/**
-	 * Optionally save the Address values into separate fields
+	 * Store individual pieces of address data in their own meta keys.
+	 *
+	 * This sanitizes the data while also short-circuiting the sanitization process.
+	 *
+	 * @param null  $override_value
+	 * @param array $value
+	 * @param int   $object_id
+	 * @param array $field_args
+	 *
+	 * @return bool
 	 */
-	public static function maybe_save_split_values( $override_value, $value, $object_id, $field_args ) {
-		if ( ! isset( $field_args['split_values'] ) || ! $field_args['split_values'] ) {
-			// Don't do the override
-			return $override_value;
-		}
-
-		$address_keys = array( 'address-1', 'address-2', 'city', 'state', 'zip' );
+	public static function sanitize( $override_value, $value, $object_id, $field_args ) {
+		$address_keys = array(
+			'address-1',
+			'address-2',
+			'city',
+			'state',
+			'zip',
+			'latitude',
+			'longitude',
+		);
 
 		foreach ( $address_keys as $key ) {
 			if ( ! empty( $value[ $key ] ) ) {
-				update_post_meta( $object_id, $field_args['id'] . 'addr_' . $key, sanitize_text_field( $value[ $key ] ) );
+				// Basic validation of latitude/longitude.
+				if ( in_array( $key, array( 'latitude', 'longitude' ), true ) ) {
+					$value[ $key ] = (float) filter_var( $value[ $key ], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+				}
+				update_post_meta( $object_id, $field_args['id'] . '_' . $key, sanitize_text_field( $value[ $key ] ) );
+			} else {
+				delete_post_meta( $object_id, $field_args['id'] . '_' . $key );
 			}
 		}
 
@@ -235,32 +279,4 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 		// Tell CMB2 we already did the update
 		return true;
 	}
-
-	public static function sanitize( $check, $meta_value, $object_id, $field_args, $sanitize_object ) {
-
-		// if not repeatable, bail out.
-		if ( ! is_array( $meta_value ) || ! $field_args['repeatable'] ) {
-			return $check;
-		}
-
-		foreach ( $meta_value as $key => $val ) {
-			$meta_value[ $key ] = array_filter( array_map( 'sanitize_text_field', $val ) );
-		}
-
-		return array_filter( $meta_value );
-	}
-
-	public static function escape( $check, $meta_value, $field_args, $field_object ) {
-		// if not repeatable, bail out.
-		if ( ! is_array( $meta_value ) || ! $field_args['repeatable'] ) {
-			return $check;
-		}
-
-		foreach ( $meta_value as $key => $val ) {
-			$meta_value[ $key ] = array_filter( array_map( 'esc_attr', $val ) );
-		}
-
-		return array_filter( $meta_value );
-	}
-
 }
