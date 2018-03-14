@@ -125,8 +125,8 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 		ob_start();
 		// Do html
 		?>
-		<div><p><label for="<?php echo $this->_id( '_address_1', false ); ?>"><?php echo esc_html( $this->_text( 'address_address_1_text', 'Address 1' ) ); ?></label></p>
-			<?php echo $this->types->input(
+		<div><p><label for="<?php echo esc_attr( $this->_id( '_address_1', false ) ); ?>"><?php echo esc_html( $this->_text( 'address_address_1_text', 'Address 1' ) ); ?></label></p>
+			<?php echo $this->types->input( // WPCS: XSS Ok.
 				array(
 					'name'  => $this->_name( '[address-1]' ),
 					'id'    => $this->_id( '_address_1' ),
@@ -135,8 +135,8 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 				)
 			); ?>
 		</div>
-		<div><p><label for="<?php echo $this->_id( '_address_2', false ); ?>'"><?php echo esc_html( $this->_text( 'address_address_2_text', 'Address 2' ) ); ?></label></p>
-			<?php echo $this->types->input(
+		<div><p><label for="<?php echo esc_attr( $this->_id( '_address_2', false ) ); ?>'"><?php echo esc_html( $this->_text( 'address_address_2_text', 'Address 2' ) ); ?></label></p>
+			<?php echo $this->types->input( // WPCS: XSS Ok.
 				array(
 					'name'  => $this->_name( '[address-2]' ),
 					'id'    => $this->_id( '_address_2' ),
@@ -146,8 +146,8 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 			); ?>
 		</div>
 		<div style="overflow: hidden;">
-			<div class="alignleft"><p><label for="<?php echo $this->_id( '_city', false ); ?>'"><?php echo esc_html( $this->_text( 'address_city_text', 'City' ) ); ?></label></p>
-				<?php echo $this->types->input(
+			<div class="alignleft"><p><label for="<?php echo esc_attr( $this->_id( '_city', false ) ); ?>'"><?php echo esc_html( $this->_text( 'address_city_text', 'City' ) ); ?></label></p>
+				<?php echo $this->types->input( // WPCS: XSS Ok.
 					array(
 						'class' => 'cmb_text_small',
 						'name'  => $this->_name( '[city]' ),
@@ -157,9 +157,9 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 					)
 				); ?>
 			</div>
-			<div class="alignleft"><p><label for="<?php echo $this->_id( '_state', false ); ?>'"><?php echo esc_html( $this->_text( 'address_state_text', $state_label ) ); ?></label></p>
+			<div class="alignleft"><p><label for="<?php echo esc_attr( $this->_id( '_state', false ) ); ?>'"><?php echo esc_html( $this->_text( 'address_state_text', $state_label ) ); ?></label></p>
 				<?php if ( $this->field->args( 'do_country' ) ) : ?>
-					<?php echo $this->types->input(
+					<?php echo $this->types->input( // WPCS: XSS Ok.
 						array(
 							'class' => 'cmb_text_small',
 							'name'  => $this->_name( '[state]' ),
@@ -169,7 +169,7 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 						)
 					); ?>
 				<?php else : ?>
-					<?php echo $this->types->select(
+					<?php echo $this->types->select( // WPCS: XSS Ok.
 						array(
 							'name'    => $this->_name( '[state]' ),
 							'id'      => $this->_id( '_state' ),
@@ -179,8 +179,8 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 					); ?>
 				<?php endif; ?>
 			</div>
-			<div class="alignleft"><p><label for="<?php echo $this->_id( '_zip', false ); ?>'"><?php echo esc_html( $this->_text( 'address_zip_text', 'Zip' ) ); ?></label></p>
-				<?php echo $this->types->input(
+			<div class="alignleft"><p><label for="<?php echo esc_attr( $this->_id( '_zip', false ) ); ?>'"><?php echo esc_html( $this->_text( 'address_zip_text', 'Zip' ) ); ?></label></p>
+				<?php echo $this->types->input( // WPCS: XSS Ok.
 					array(
 						'class' => 'cmb_text_small',
 						'name'  => $this->_name( '[zip]' ),
@@ -193,8 +193,8 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 			</div>
 		</div>
 		<?php if ( $this->field->args( 'do_country' ) ) : ?>
-			<div class="clear"><p><label for="<?php echo $this->_id( '_country', false ); ?>'"><?php echo esc_html( $this->_text( 'address_country_text', 'Country' ) ); ?></label></p>
-				<?php echo $this->types->input(
+			<div class="clear"><p><label for="<?php echo esc_attr( $this->_id( '_country', false ) ); ?>'"><?php echo esc_html( $this->_text( 'address_country_text', 'Country' ) ); ?></label></p>
+				<?php echo $this->types->input( // WPCS: XSS Ok.
 					array(
 						'name'  => $this->_name( '[country]' ),
 						'id'    => $this->_id( '_country' ),
@@ -205,12 +205,12 @@ class CMB2_Render_Address_Field extends CMB2_Type_Base {
 			</div>
 		<?php endif; ?>
 		<p class="clear">
-			<?php echo $this->_desc(); ?>
+			<?php echo $this->_desc(); // WPCS: XSS Ok. ?>
 		</p>
 		<?php
 
 		// grab the data from the output buffer.
-		return $this->rendered( ob_get_clean() );
+		return $this->rendered( ob_get_clean() ); // WPCS: XSS Ok.
 	}
 
 	/**
