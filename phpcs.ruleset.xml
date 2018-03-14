@@ -15,8 +15,6 @@
 
     <description>Sniffs for PHP coding standards used by WSUWP Plugins</description>
 
-    <exclude-pattern>includes/class-cmb2-render-address-field.php</exclude-pattern>
-
     <rule ref="WordPress-Extra">
         <exclude name="WordPress.NamingConventions.ValidFunctionName" />
         <exclude name="WordPress.Files.FileName" />
