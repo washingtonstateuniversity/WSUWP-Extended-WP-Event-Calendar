@@ -11,7 +11,7 @@ namespace WSU\Events\Taxonomies;
  * @return string Current version of the Types taxonomy schema.
  */
 function types_schema_version() {
-	return '20180305-001';
+	return '20180321-001';
 }
 
 /**
@@ -169,6 +169,7 @@ function types_checklist_args() {
  */
 function get_event_types() {
 	$types = array(
+		'Academic Calendar',
 		'Athletics / Sports',
 		'Careers / Jobs',
 		'Ceremony / Service',
