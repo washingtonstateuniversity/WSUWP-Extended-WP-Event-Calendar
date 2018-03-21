@@ -153,7 +153,7 @@ function prevent_type_term_creation( $term, $taxonomy ) {
  * with limiting events to a single `type` designation, so we can safely
  * disable this custom output.
  *
- * @since 0.0.3
+ * @since 0.1.0
  *
  */
 function types_checklist_args() {
