@@ -128,7 +128,7 @@ function mirror_taxonomy_post_type( $post_id, $post ) {
 /**
  * Manage the venue meta captured by CMB2.
  *
- * @sine 0.1.0
+ * @since 0.1.0
  */
 function add_location_metabox() {
 	$cmb = new_cmb2_box(
@@ -220,4 +220,64 @@ function display_address_field( $post_id = 0 ) {
 function cmb2_init_address_field() {
 	require_once dirname( __FILE__ ) . '/class-cmb2-render-address-field.php';
 	\CMB2_Render_Address_Field::init();
+}
+
+/**
+ * Return the venue for an event.
+ *
+ * This function should be used in the loop.
+ *
+ * @since 0.1.1
+ */
+function get_venue() {
+	$venue_term = wp_get_post_terms( get_the_ID(), 'venue-tax' );
+
+	if ( ! $venue_term ) {
+		return false;
+	}
+
+	$venue_post = get_posts( array(
+		'posts_per_page' => 1,
+		'post_type'      => 'venue',
+		'tax_query'      => array(
+			array(
+				'taxonomy' => 'venue-tax',
+				'terms' => $venue_term[0]->term_id,
+			),
+		),
+	) );
+
+	if ( ! $venue_post ) {
+		return false;
+	}
+
+	$venue_post_id = $venue_post[0]->ID;
+
+	$address_1 = get_post_meta( $venue_post_id, 'venue_address_address-1', true );
+	$address_2 = get_post_meta( $venue_post_id, 'venue_address_address-2', true );
+	$city = get_post_meta( $venue_post_id, 'venue_address_city', true );
+	$state = get_post_meta( $venue_post_id, 'venue_address_state', true );
+	$zip = get_post_meta( $venue_post_id, 'venue_address_zip', true );
+
+	$address = $venue_post[0]->post_title;
+	$address .= ( $address_1 ) ? ', ' . $address_1 : '';
+	$address .= ( $address_2 ) ? ', ' . $address_2 : '';
+	$address .= ( $city ) ? ', ' . $city : '';
+	$address .= ( $state ) ? ', ' . $state : '';
+	$address .= ( $zip ) ? ' ' . $zip : '';
+
+	$latitude = get_post_meta( $venue_post_id, 'venue_address_latitude', true );
+	$longitude = get_post_meta( $venue_post_id, 'venue_address_longitude', true );
+
+	if ( $latitude && $longitude ) {
+		$link = 'https://www.google.com/maps/search/?api=1&query=';
+		$link .= $latitude . ',' . $longitude;
+	} else {
+		$link = false;
+	}
+
+	return array(
+		'address' => $address,
+		'link' => $link,
+	);
 }
