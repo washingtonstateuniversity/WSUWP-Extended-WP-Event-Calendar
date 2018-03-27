@@ -4,6 +4,7 @@ namespace WSU\Events\WP_API;
 
 add_filter( 'register_post_type_args', 'WSU\Events\WP_API\register_endpoint', 10, 2 );
 add_action( 'rest_api_init', 'WSU\Events\WP_API\register_api_fields' );
+add_action( 'rest_event_query', 'WSU\Events\WP_API\filter_rest_query' );
 
 /**
  * Update the `register_post_type()` arguments for Events to support an /events/ endpoint.
@@ -88,4 +89,37 @@ function get_api_meta_data( $object, $field, $request ) {
 	}
 
 	return '';
+}
+
+/**
+ * Filter the events REST API query before it fires.
+ *
+ * @since 0.1.1
+ *
+ * @param array $args
+ *
+ * @return array
+ */
+function filter_rest_query( $args ) {
+	date_default_timezone_set( 'America/Los_Angeles' );
+
+	$args['meta_query'] = array(
+		'wsuwp_event_start_date' => array(
+			'key' => 'wp_event_calendar_date_time',
+			'value' => date( 'Y-m-d 00:00:00' ),
+			'compare' => '>=',
+			'type' => 'DATETIME',
+		),
+		'wsuwp_event_end_date' => array(
+			'key' => 'wp_event_calendar_end_date_time',
+			'value' => date( 'Y-m-d H:i:s' ),
+			'compare' => '>',
+			'type' => 'DATETIME',
+		),
+	);
+
+	$args['orderby'] = 'wsuwp_event_start_date';
+	$args['order'] = 'ASC';
+
+	return $args;
 }
