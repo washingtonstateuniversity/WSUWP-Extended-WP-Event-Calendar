@@ -225,12 +225,11 @@ function cmb2_init_address_field() {
 /**
  * Return the venue for an event.
  *
- * This function should be used in the loop.
- *
  * @since 0.1.1
  */
-function get_venue() {
-	$venue_term = wp_get_post_terms( get_the_ID(), 'venue-tax' );
+function get_venue( $post_id = false ) {
+	$post_id = ( $post_id ) ? $post_id : get_the_ID();
+	$venue_term = wp_get_post_terms( $post_id, 'venue-tax' );
 
 	if ( ! $venue_term ) {
 		return false;
@@ -279,5 +278,10 @@ function get_venue() {
 	return array(
 		'address' => $address,
 		'link' => $link,
+		'raw' => array(
+			'name' => $venue_post[0]->post_title,
+			'city' => $city,
+			'state' => $state,
+		),
 	);
 }
