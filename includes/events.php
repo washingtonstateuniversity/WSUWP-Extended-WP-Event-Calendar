@@ -20,7 +20,6 @@ function make_public( $args, $post_type ) {
 		$args['exclude_from_search'] = false;
 		$args['publicly_queryable'] = true;
 		$args['has_archive'] = true;
-		$args['show_in_rest'] = true;
 	}
 
 	return $args;
