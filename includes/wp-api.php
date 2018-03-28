@@ -103,23 +103,43 @@ function get_api_meta_data( $object, $field, $request ) {
 function filter_rest_query( $args ) {
 	date_default_timezone_set( 'America/Los_Angeles' );
 
-	$args['meta_query'] = array(
-		'wsuwp_event_start_date' => array(
-			'key' => 'wp_event_calendar_date_time',
-			'value' => date( 'Y-m-d 00:00:00' ),
-			'compare' => '>=',
-			'type' => 'DATETIME',
-		),
-		'wsuwp_event_end_date' => array(
-			'key' => 'wp_event_calendar_end_date_time',
-			'value' => date( 'Y-m-d H:i:s' ),
-			'compare' => '>',
-			'type' => 'DATETIME',
-		),
-	);
+	if ( isset( $_REQUEST['tribe_event_display'] ) && 'past' === $_REQUEST['tribe_event_display'] ) { // WPCS: CSRF Ok.
+		$args['meta_query'] = array(
+			'wsuwp_event_start_date' => array(
+				'key' => 'wp_event_calendar_date_time',
+				'value' => date( 'Y-m-d 00:00:00' ),
+				'compare' => '<=',
+				'type' => 'DATETIME',
+			),
+			'wsuwp_event_end_date' => array(
+				'key' => 'wp_event_calendar_end_date_time',
+				'value' => date( 'Y-m-d H:i:s' ),
+				'compare' => '<',
+				'type' => 'DATETIME',
+			),
+		);
 
-	$args['orderby'] = 'wsuwp_event_start_date';
-	$args['order'] = 'ASC';
+		$args['orderby'] = 'wsuwp_event_end_date';
+		$args['order'] = 'DESC';
+	} else {
+		$args['meta_query'] = array(
+			'wsuwp_event_start_date' => array(
+				'key' => 'wp_event_calendar_date_time',
+				'value' => date( 'Y-m-d 00:00:00' ),
+				'compare' => '>=',
+				'type' => 'DATETIME',
+			),
+			'wsuwp_event_end_date' => array(
+				'key' => 'wp_event_calendar_end_date_time',
+				'value' => date( 'Y-m-d H:i:s' ),
+				'compare' => '>',
+				'type' => 'DATETIME',
+			),
+		);
+
+		$args['orderby'] = 'wsuwp_event_start_date';
+		$args['order'] = 'ASC';
+	}
 
 	return $args;
 }
