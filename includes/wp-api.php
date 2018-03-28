@@ -4,6 +4,7 @@ namespace WSU\Events\WP_API;
 
 add_filter( 'register_post_type_args', 'WSU\Events\WP_API\register_endpoint', 10, 2 );
 add_action( 'rest_api_init', 'WSU\Events\WP_API\register_api_fields' );
+add_filter( 'rest_prepare_event', 'WSU\Events\WP_API\event_content', 10, 2 );
 add_action( 'rest_event_query', 'WSU\Events\WP_API\filter_rest_query' );
 
 /**
@@ -89,6 +90,22 @@ function get_api_meta_data( $object, $field, $request ) {
 	}
 
 	return '';
+}
+
+/**
+ * Filter post data to include content in the REST API response.
+ *
+ * @since 0.1.1
+ *
+ * @param WP_REST_Response $response
+ * @param WP_Post $args    $post
+ *
+ * @return WP_REST_Response
+ */
+function event_content( $response, $post ) {
+	$response->data['content']['rendered'] = wp_kses_post( wpautop( $post->post_content ) );
+
+	return $response;
 }
 
 /**
