@@ -72,6 +72,21 @@ function register_meta() {
  * @param string $post_type
  */
 function meta_boxes() {
+	remove_meta_box(
+		'wp_event_calendar_details',
+		\wp_event_calendar_allowed_post_types(),
+		'above_event_editor'
+	);
+
+	add_meta_box(
+		'wp_event_calendar_details',
+		__( 'Details', 'wp-event-calendar' ),
+		'wp_event_calendar_details_metabox',
+		wp_event_calendar_allowed_post_types(),
+		'above_event_editor',
+		'low'
+	);
+
 	add_meta_box(
 		'wsuwp_event_calendar_location',
 		'Location',
