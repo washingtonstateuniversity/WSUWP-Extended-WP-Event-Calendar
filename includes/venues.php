@@ -36,7 +36,7 @@ function register_post_type() {
 			'show_ui'           => true,
 			'show_in_nav_menus' => true,
 			'supports'          => array( 'title' ),
-			'has_archive'       => true,
+			'has_archive'       => false,
 			'rewrite'           => array(
 				'slug' => 'venue',
 			),
