@@ -31,7 +31,7 @@ function register_post_type() {
 				'parent_item_colon'   => __( 'Parent Venues', 'wsuwp-extended-wp-event-calendar' ),
 				'menu_name'           => __( 'Venues', 'wsuwp-extended-wp-event-calendar' ),
 			),
-			'public'            => true,
+			'public'            => false,
 			'hierarchical'      => false,
 			'show_ui'           => true,
 			'show_in_nav_menus' => true,
@@ -40,7 +40,7 @@ function register_post_type() {
 			'rewrite'           => array(
 				'slug' => 'venue',
 			),
-			'query_var'         => true,
+			'query_var'         => false,
 			'menu_icon'         => 'dashicons-admin-post',
 			'show_in_rest'      => true,
 			'rest_base'         => 'venue',
