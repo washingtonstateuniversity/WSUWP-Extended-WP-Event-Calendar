@@ -45,10 +45,6 @@ function post_meta_keys() {
 			'type' => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
 		),
-		'_wsuwp_event_related_site' => array(
-			'type' => 'string',
-			'sanitize_callback' => 'esc_url_raw',
-		),
 	);
 }
 
@@ -115,14 +111,6 @@ function meta_boxes() {
 		'wsuwp_event_calendar_cost',
 		'Cost',
 		'WSU\Events\Meta_Data\display_cost_meta_box',
-		\wp_event_calendar_allowed_post_types(),
-		'above_event_editor',
-		'default'
-	);
-	add_meta_box(
-		'wsuwp_event_calendar_site',
-		'Related Site',
-		'WSU\Events\Meta_Data\display_site_meta_box',
 		\wp_event_calendar_allowed_post_types(),
 		'above_event_editor',
 		'default'
@@ -308,33 +296,6 @@ function display_cost_meta_box( $post ) {
 					   name="_wsuwp_event_cost"
 					   class="widefat"
 					   value="<?php echo esc_attr( $cost ); ?>" />
-			</td>
-		</tr>
-	</table>
-	<?php
-}
-
-/**
- * Displays the meta box used to capture an event's related site data.
- *
- * @since 0.0.1
- *
- * @param \WP_Post $post
- */
-function display_site_meta_box( $post ) {
-	$url = get_post_meta( $post->ID, '_wsuwp_event_related_site', true );
-	?>
-	<table class="form-table">
-		<tr>
-			<th>
-				<label for="wsuwp_event_site">URL</label>
-			</th>
-			<td>
-				<input type="url"
-					   id="wsuwp_event_site"
-					   name="_wsuwp_event_related_site"
-					   class="widefat"
-					   value="<?php echo esc_attr( $url ); ?>" />
 			</td>
 		</tr>
 	</table>
