@@ -91,6 +91,7 @@ function meta_boxes() {
 		'above_event_editor',
 		'default'
 	);
+
 	add_meta_box(
 		'wsuwp_event_calendar_contact',
 		'Contact/Organizer',
@@ -99,6 +100,7 @@ function meta_boxes() {
 		'above_event_editor',
 		'default'
 	);
+
 	add_meta_box(
 		'wsuwp_event_calendar_action',
 		'Action',
@@ -107,6 +109,7 @@ function meta_boxes() {
 		'above_event_editor',
 		'default'
 	);
+
 	add_meta_box(
 		'wsuwp_event_calendar_cost',
 		'Cost',
