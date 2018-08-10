@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WSUWP Extended WP Event Calendar
-Version: 0.1.4
+Version: 0.1.5
 Description: WSU extensions of WP Event Calendar
 Author: washingtonstateuniversity, jeremyfelt
 Author URI: https://web.wsu.edu/
