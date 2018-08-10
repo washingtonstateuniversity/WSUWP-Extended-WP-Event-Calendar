@@ -27,5 +27,7 @@
         <exclude name="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace" />
         <exclude name="Generic.Formatting.MultipleStatementAlignment.NotSameWarning" />
         <exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found" />
+        <exclude name="WordPress.WP.EnqueuedResourceParameters.MissingVersion" />
+        <exclude name="WordPress.WP.TimezoneChange.timezone_change_date_default_timezone_set" />
     </rule>
 </ruleset>
