@@ -118,19 +118,20 @@ function event_content( $response, $post ) {
  * @return array
  */
 function filter_rest_query( $args ) {
-	date_default_timezone_set( 'America/Los_Angeles' );
+	$today = current_time( 'Y-m-d' ) . ' 00:00:00';
+	$current_time = current_time( 'mysql' );
 
 	if ( isset( $_REQUEST['tribe_event_display'] ) && 'past' === $_REQUEST['tribe_event_display'] ) { // WPCS: CSRF Ok.
 		$args['meta_query'] = array(
 			'wsuwp_event_start_date' => array(
 				'key' => 'wp_event_calendar_date_time',
-				'value' => date( 'Y-m-d 00:00:00' ),
+				'value' => $today,
 				'compare' => '<=',
 				'type' => 'DATETIME',
 			),
 			'wsuwp_event_end_date' => array(
 				'key' => 'wp_event_calendar_end_date_time',
-				'value' => date( 'Y-m-d H:i:s' ),
+				'value' => $current_time,
 				'compare' => '<',
 				'type' => 'DATETIME',
 			),
@@ -142,13 +143,13 @@ function filter_rest_query( $args ) {
 		$args['meta_query'] = array(
 			'wsuwp_event_start_date' => array(
 				'key' => 'wp_event_calendar_date_time',
-				'value' => date( 'Y-m-d 00:00:00' ),
+				'value' => $today,
 				'compare' => '>=',
 				'type' => 'DATETIME',
 			),
 			'wsuwp_event_end_date' => array(
 				'key' => 'wp_event_calendar_end_date_time',
-				'value' => date( 'Y-m-d H:i:s' ),
+				'value' => $current_time,
 				'compare' => '>',
 				'type' => 'DATETIME',
 			),

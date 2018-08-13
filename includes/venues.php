@@ -126,7 +126,7 @@ function mirror_taxonomy_post_type( $post_id, $post ) {
 		// Update the term title and slug.
 		wp_update_term( $term->term_id, 'venue-tax', array(
 			'name' => $post->post_title,
-			'slug' => $post->post_name,
+			'slug' => sanitize_title( $post->post_title ),
 		) );
 	}
 }
