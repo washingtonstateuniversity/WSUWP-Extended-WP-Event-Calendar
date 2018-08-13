@@ -76,6 +76,7 @@ function register_university_taxonomies() {
 	register_taxonomy_for_object_type( 'wsuwp_university_category', 'event' );
 	register_taxonomy_for_object_type( 'wsuwp_university_location', 'event' );
 	register_taxonomy_for_object_type( 'wsuwp_university_org', 'event' );
+	register_taxonomy_for_object_type( 'post_tag', 'event' );
 }
 
 /**
