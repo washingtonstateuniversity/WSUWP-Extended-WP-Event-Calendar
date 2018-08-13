@@ -87,9 +87,13 @@ function register_university_taxonomies() {
  * @param array $post_types Post types and their associated taxonomies.
  */
 function taxonomy_meta_box( $post_types ) {
-	$event_taxonomies = get_object_taxonomies( 'event' );
-	$event_taxonomies = array_diff( $event_taxonomies, array( 'venue-tax' ) );
-	$post_types['event'] = $event_taxonomies;
+	$post_types['event'] = array(
+		'event-type',
+		'wsuwp_university_category',
+		'wsuwp_university_location',
+		'wsuwp_university_org',
+		'post_tag',
+	);
 
 	return $post_types;
 }
