@@ -394,5 +394,5 @@ function admin_enqueue_scripts() {
 		return;
 	}
 
-	wp_enqueue_style( 'wsuwp_event_calendar', plugins_url( '/css/edit-post.css', dirname( __FILE__ ) ) );
+	wp_enqueue_style( 'wsuwp_event_calendar', plugins_url( '/css/edit-post.css', dirname( __FILE__ ) ) ); // @codingStandardsIgnoreLine
 }
