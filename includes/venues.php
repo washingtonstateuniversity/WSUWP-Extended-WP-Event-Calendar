@@ -179,48 +179,6 @@ function add_location_metabox() {
 }
 
 /**
- * Template tag for displaying a formatted address from the custom CMB2 address field type
- * on the front-end.
- *
- * This was forked from CMB2's snippet library and can be adapted to our needs.
- *
- * Source: https://github.com/CMB2/CMB2-Snippet-Library/tree/master/custom-field-types/address-field-type
- *
- * @since  0.1.0
- *
- * @param  string $metakey The 'id' of the 'address' field (the metakey for get_post_meta)
- * @param  integer $post_id (optional) post ID. If using in the loop, it is not necessary
- */
-function display_address_field( $post_id = 0 ) {
-	$post_id = $post_id ? $post_id : get_the_ID();
-	$address = get_post_meta( $post_id, 'venue_address', true );
-
-	// Set default values for each address key
-	$address = wp_parse_args(
-		$address, array(
-			'address-1' => '',
-			'address-2' => '',
-			'city'      => '',
-			'state'     => '',
-			'zip'       => '',
-			'country'   => '',
-		)
-	);
-
-	$output = '<div class="cmb2-address">';
-	$output .= '<p><strong>Address:</strong> ' . esc_html( $address['address-1'] ) . '</p>';
-	if ( $address['address-2'] ) {
-		$output .= '<p>' . esc_html( $address['address-2'] ) . '</p>';
-	}
-	$output .= '<p><strong>City:</strong> ' . esc_html( $address['city'] ) . '</p>';
-	$output .= '<p><strong>State:</strong> ' . esc_html( $address['state'] ) . '</p>';
-	$output .= '<p><strong>Zip:</strong> ' . esc_html( $address['zip'] ) . '</p>';
-	$output .= '</div><!-- .cmb2-address -->';
-
-	echo $output; // WCPS: XSS Ok.
-}
-
-/**
  * Initialize the custom address field for CMB2.
  */
 function cmb2_init_address_field() {
