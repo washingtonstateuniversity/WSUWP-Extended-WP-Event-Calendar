@@ -5,6 +5,7 @@ namespace WSU\Events\Venues;
 add_action( 'init', 'WSU\Events\Venues\register_post_type', 11 );
 add_action( 'init', 'WSU\Events\Venues\register_taxonomy', 11 );
 add_action( 'save_post_venue', 'WSU\Events\Venues\mirror_taxonomy_post_type', 10, 2 );
+add_action( 'before_delete_post', 'WSU\Events\Venues\delete_venue' );
 add_action( 'cmb2_admin_init', 'WSU\Events\Venues\add_location_metabox' );
 add_action( 'cmb2_init', 'WSU\Events\Venues\cmb2_init_address_field' );
 
@@ -131,6 +132,29 @@ function mirror_taxonomy_post_type( $post_id, $post ) {
 			'name' => $post_title,
 			'slug' => sanitize_title( $post_title ),
 		) );
+	}
+}
+
+/**
+ * Delete the associated venue term when a venue post is deleted.
+ *
+ * @since 0.1.6
+ *
+ * @param int $post_id The ID of the post being deleted.
+ */
+function delete_venue( $post_id ) {
+	if ( 'venue' !== get_post_type( $post_id ) ) {
+		return;
+	}
+
+	$terms = wp_get_object_terms( $post_id, 'venue-tax' );
+
+	if ( empty( $terms ) ) {
+		return;
+	}
+
+	foreach ( $terms as $term ) {
+		wp_delete_term( $term->term_id, 'venue-tax' );
 	}
 }
 
