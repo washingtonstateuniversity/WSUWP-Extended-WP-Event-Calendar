@@ -4,7 +4,7 @@ namespace WSU\Events\Venues;
 
 add_action( 'init', 'WSU\Events\Venues\register_post_type', 11 );
 add_action( 'init', 'WSU\Events\Venues\register_taxonomy', 11 );
-add_action( 'save_post', 'WSU\Events\Venues\mirror_taxonomy_post_type', 10, 2 );
+add_action( 'save_post_venue', 'WSU\Events\Venues\mirror_taxonomy_post_type', 10, 2 );
 add_action( 'cmb2_admin_init', 'WSU\Events\Venues\add_location_metabox' );
 add_action( 'cmb2_init', 'WSU\Events\Venues\cmb2_init_address_field' );
 
@@ -97,20 +97,18 @@ function mirror_taxonomy_post_type( $post_id, $post ) {
 		return;
 	}
 
-	if ( 'venue' !== $post->post_type ) {
-		return;
-	}
-
 	if ( 'auto-draft' === $post->post_name || empty( $post->post_name ) ) {
 		return;
 	}
 
-	// Check for an existing venue with the same slug as this post.
-	$term = get_term_by( 'slug', $post->post_name, 'venue-tax' );
+	$post_title = $post->post_title;
 
-	if ( ! is_object( $term ) ) {
+	// Check if the post already has a venue term associated with it.
+	$terms = wp_get_object_terms( $post_id, 'venue-tax' );
+
+	if ( empty( $terms ) ) {
 		$term = wp_insert_term(
-			$post->post_title, 'venue-tax', array(
+			$post_title, 'venue-tax', array(
 				'slug' => $post->post_name,
 			)
 		);
@@ -119,14 +117,19 @@ function mirror_taxonomy_post_type( $post_id, $post ) {
 			wp_set_object_terms( $post_id, $term['term_id'], 'venue-tax' );
 		}
 	} else {
+		if ( $terms[0]->term_name === $post_title ) {
+			return;
+		}
+
+		$term_id = $terms[0]->term_id;
 
 		// Ensure the relationship is maintained.
-		wp_set_object_terms( $post_id, $term->term_id, 'venue-tax' );
+		wp_set_object_terms( $post_id, $term_id, 'venue-tax' );
 
 		// Update the term title and slug.
-		wp_update_term( $term->term_id, 'venue-tax', array(
-			'name' => $post->post_title,
-			'slug' => sanitize_title( $post->post_title ),
+		wp_update_term( $terms[0]->term_id, 'venue-tax', array(
+			'name' => $post_title,
+			'slug' => sanitize_title( $post_title ),
 		) );
 	}
 }
