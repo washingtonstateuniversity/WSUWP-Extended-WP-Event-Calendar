@@ -59,14 +59,14 @@ function register_api_fields() {
 function get_api_meta_data( $object, $field, $request ) {
 	if ( 'start_date' === $field ) {
 		$start_date = get_post_meta( $object['id'], 'wp_event_calendar_date_time', true );
-		$start_date = date( 'Y-m-d H:i:s', strtotime( $start_date ) );
+		$start_date = date_i18n( 'Y-m-d H:i:s', strtotime( $start_date ) );
 
 		return esc_html( $start_date );
 	}
 
 	if ( 'end_date' === $field ) {
 		$end_date = get_post_meta( $object['id'], 'wp_event_calendar_end_date_time', true );
-		$end_date = date( 'Y-m-d H:i:s', strtotime( $end_date ) );
+		$end_date = date_i18n( 'Y-m-d H:i:s', strtotime( $end_date ) );
 
 		return esc_html( $end_date );
 	}
