@@ -118,7 +118,7 @@ function event_content( $response, $post ) {
  * @return array
  */
 function filter_rest_query( $args ) {
-	$today = date_i18n( 'Y-m-d' ) . '00:00:00';
+	$today = date_i18n( 'Y-m-d 00:00:00' );
 	$current_time = date_i18n( 'Y-m-d H:i:s' );
 
 	if ( isset( $_REQUEST['tribe_event_display'] ) && 'past' === $_REQUEST['tribe_event_display'] ) { // WPCS: CSRF Ok.
