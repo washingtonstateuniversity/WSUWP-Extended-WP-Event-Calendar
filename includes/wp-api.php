@@ -121,6 +121,10 @@ function filter_rest_query( $args ) {
 	$today = date_i18n( 'Y-m-d 00:00:00' );
 	$current_time = current_time( 'mysql' );
 
+	// The WP Event Calendar plugin uses UTC for setting post statues,
+	// which sets them to `passed` a bit prematurely for this timezone.
+	$args['post_status'] = array( 'publish', 'passed' );
+
 	if ( isset( $_REQUEST['tribe_event_display'] ) && 'past' === $_REQUEST['tribe_event_display'] ) { // WPCS: CSRF Ok.
 		$args['meta_query'] = array(
 			'wsuwp_event_start_date' => array(
