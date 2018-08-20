@@ -119,7 +119,7 @@ function event_content( $response, $post ) {
  */
 function filter_rest_query( $args ) {
 	$today = date_i18n( 'Y-m-d 00:00:00' );
-	$current_time = date_i18n( 'Y-m-d H:i:s' );
+	$current_time = current_time( 'mysql' );
 
 	if ( isset( $_REQUEST['tribe_event_display'] ) && 'past' === $_REQUEST['tribe_event_display'] ) { // WPCS: CSRF Ok.
 		$args['meta_query'] = array(
@@ -141,12 +141,6 @@ function filter_rest_query( $args ) {
 		$args['order'] = 'DESC';
 	} else {
 		$args['meta_query'] = array(
-			'wsuwp_event_start_date' => array(
-				'key' => 'wp_event_calendar_date_time',
-				'value' => $today,
-				'compare' => '>=',
-				'type' => 'DATETIME',
-			),
 			'wsuwp_event_end_date' => array(
 				'key' => 'wp_event_calendar_end_date_time',
 				'value' => $current_time,
@@ -155,7 +149,9 @@ function filter_rest_query( $args ) {
 			),
 		);
 
-		$args['orderby'] = 'wsuwp_event_start_date';
+		$args['meta_key'] = 'wp_event_calendar_date_time';
+		$args['meta_type'] = 'DATETIME';
+		$args['orderby'] = 'meta_value';
 		$args['order'] = 'ASC';
 	}
 
