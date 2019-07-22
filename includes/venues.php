@@ -65,8 +65,8 @@ function register_taxonomy() {
 		array(
 			'hierarchical'      => false,
 			'public'            => false,
-			'show_in_nav_menus' => false,
-			'show_ui'           => false,
+			'show_in_nav_menus' => true,
+			'show_ui'           => true,
 			'show_admin_column' => false,
 			'query_var'         => false,
 			'rewrite'           => false,
