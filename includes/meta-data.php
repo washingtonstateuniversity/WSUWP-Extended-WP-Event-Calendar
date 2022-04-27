@@ -68,6 +68,16 @@ function register_meta() {
  * @param string $post_type
  */
 function meta_boxes() {
+
+	add_meta_box(
+		'wp_event_calendar_event_featured_categories',
+		__( 'Featured Event Categories', 'wp-event-calendar' ),
+		'WSU\Events\Meta_Data\display_featured_categories',
+		wp_event_calendar_allowed_post_types(),
+		'above_event_editor',
+		'high'
+	);
+
 	remove_meta_box(
 		'wp_event_calendar_details',
 		\wp_event_calendar_allowed_post_types(),
@@ -181,6 +191,64 @@ function display_location_meta_box( $post ) {
 		</tr>
 	</table>
 	<?php
+}
+
+/**
+ * Displays the meta box used to capture featured category data.
+ *
+ * @since 0.0.1
+ *
+ * @param \WP_Post $post
+ */
+function display_featured_categories( $post ) {
+
+	$featured_events = array(
+		1350 => 'Commencement',
+	);
+
+	$featured_event_terms = wp_get_post_terms( $post->ID, 'wsuwp_university_category', array( 'fields' => 'ids' ) );
+
+	$campus = array(
+		332 => 'WSU Pullman',
+		334 => 'WSU Spokane',
+		335 => 'WSU Tri-Cities',
+		336 => 'WSU Vancouver',
+		337 => 'WSU Global Campus',
+		340 => 'WSU Everett',
+		338 => 'WSU Extension',
+	);
+
+	$campus_terms = wp_get_post_terms( $post->ID, 'wsuwp_university_location', array( 'fields' => 'ids' ) );
+
+	?>
+	<table class="form-table">
+		<tr>
+			<th>
+				<label for="_wsuwp_event_campus">Campus/Location</label>
+			</th>
+			<td>
+			<fieldset>      
+				<?php foreach ( $campus as $campus_id => $campus_label ) : ?>  
+				<input type="checkbox" name="tax_input[wsuwp_university_location][]" value="<?php echo esc_attr( $campus_id ); ?>" <?php if ( in_array( $campus_id, $campus_terms ) ) : ?>checked="checked"<?php endif; ?>><?php echo wp_kses_post( $campus_label ); ?><br>          
+				<?php endforeach; ?>    
+			</fieldset>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<label for="_wsuwp_event_featured_events">Featured Event Categories</label>
+			</th>
+			<td>
+			<fieldset>      
+				<?php foreach ( $featured_events as $featured_event_id => $featured_event_label ) : ?>  
+				<input type="checkbox" name="tax_input[wsuwp_university_category][]" value="<?php echo esc_attr( $featured_event_id ); ?>" <?php if ( in_array( $featured_event_id, $featured_event_terms ) ) : ?>checked="checked"<?php endif; ?>><?php echo wp_kses_post( $featured_event_label ); ?><br>          
+				<?php endforeach; ?>    
+			</fieldset>
+			</td>
+		</tr>
+	</table>
+	<strong>NOTE:</strong> To remove a category it must be unchecked above <strong>AND</strong> removed in the right column. 
+<?php
 }
 
 /**
